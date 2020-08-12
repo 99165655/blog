@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-
+echo phpinfo();die;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,7 +22,7 @@ Route::group(['middleware'=>['api'],'prefix'=>'admin'],function(){
     Route::post('userlist','admin\User@userList');
 
     //新增管理员
-    Route::post('adduser','admin\User@addUser');
+    Route::post('user/add','admin\User@add');
 
     //删除管理员
     Route::post('deluser','admin\User@deleteUser');

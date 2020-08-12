@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\model\admin\AdminUser;
 use Illuminate\Support\Facades\Validator;
 
-class User extends Controller
+class User extends Base
 {
     /**
      * 用户列表

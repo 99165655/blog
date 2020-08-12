@@ -21,13 +21,15 @@ class AdminUser extends Model
     //更新时间
     const UPDATED_AT = 'update_time';
 
+
+    const DELETED_AT = 'delete_time';
+
     //设定表名
     public $table = 'f_admin_user';
 
     //返回数据信息定义
     public static $success = array('code' => '1', 'msg' => '登录成功');
 
-    //错误信息
     public static $name_err = array('code' => '0', 'msg' => '用户名不存在');
 
     public static $pass_err = array('code' => '0', 'msg' => '密码错误');
@@ -35,6 +37,7 @@ class AdminUser extends Model
     public static $status_err = array('code' => '0', 'msg' => '账号已冻结');
 
     public static $empty_data = array('code' => '0', 'msg' => '请填写完整数据');
+
 
     //新增用户验证信息以及报错信息
     public static $addRules = [
@@ -59,9 +62,11 @@ class AdminUser extends Model
 
     public static function adminLogin($data)
     {
+
         $false = false;
 
-        $field = array('id', 'status', 'username', 'password', 'status', 'token');
+
+        $field = array('id',  'username', 'password', 'status', 'token');
 
         //以账号查询数据库
         $user = self::where('username', $data['username'])->select($field)->first();
@@ -72,11 +77,20 @@ class AdminUser extends Model
         //转数组
         $user = $user->toArray();
 
+
         //密码比对
-        if (!Hash::check($data['password'], $user['password'])) return ret_result($false, self::$pass_err);
+        if (!Hash::check($data['password'], $user['password'])) {
+
+            return ret_result($false, self::$pass_err);
+
+        }
 
         //状态 是否冻结
-        if ($user['status'] === 0) return ret_result($false, self::$status_err);
+        if ($user['status'] === 0) {
+
+            return ret_result($false, self::$status_err);
+
+        }
 
         //调取菜单 在这里暂时给一个假的
         $aside = array(
@@ -172,9 +186,6 @@ class AdminUser extends Model
 
             $v['status_text'] = $status_text[$v['status']];
 
-            $v['forbidRemove'] = false;
-
-            $v['showRemoveButton'] = true;
         }
 
         return $data;
