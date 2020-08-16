@@ -1,5 +1,7 @@
 <?php
-
+echo '<pre>';
+echo PHP_VERSION;
+var_dump($_FILES);die;
 /**
  * Laravel - A PHP Framework For Web Artisans
  *
