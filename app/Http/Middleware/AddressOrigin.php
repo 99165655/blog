@@ -21,6 +21,7 @@ class AddressOrigin
         header('Access-Control-Allow-Credentials: true');
         // 响应头设置
         header('Access-Control-Allow-Headers:x-requested-with,Content-Type,X-CSRF-Token');
+
         return $next($request);
     }
 }

@@ -151,8 +151,6 @@ class AdminUser extends Model
 
         $data['password'] = hash::make($data['password']);
 
-        $data['token'] = self::getToken($data);
-
         //入库
         $result = self::create($data);
 

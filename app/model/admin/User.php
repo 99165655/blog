@@ -1,20 +1,13 @@
 <?php
 
-
 namespace App\model\admin;
 
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redis;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-
-/**
- * Class Base 公用模型
- * @package App\model\admin
- */
-class Base extends Model
+class User extends Base
 {
+    use SoftDeletes;
 
     //设置可写入字段
     protected $fillable = array('username', 'password', 'email', 'token');
@@ -43,26 +36,5 @@ class Base extends Model
         'email' => 'required|email|unique:f_admin_user,email',
     ];
 
-    public static $addMessages = [
-        'username.required' => '必须填写用户名',
-        'username.max' => '用户名不能超过20个字符',
-        'username.unique' => '用户名已存在',
-        'password.required' => '必须填写密码',
-        'password.confirmed' => '两次密码不一致',
-        'password_confirmed.required' => '必须填写确认密码',
-        'email.required' => '必须填写邮箱',
-        'email.sometimes' => '邮箱以存在',
-        'email.email' => '邮箱格式错误',
-        'email.unique' => '邮箱已存在',
-    ];
-
-
-    public function add($data)
-    {
-        //入库
-        $result = self::create($data);
-
-        return add_result($result);
-    }
 
 }
