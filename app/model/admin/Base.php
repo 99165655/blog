@@ -16,53 +16,60 @@ use Illuminate\Database\Eloquent\Model;
 class Base extends Model
 {
 
-    //设置可写入字段
-    protected $fillable = array('username', 'password', 'email', 'token');
-
-
-    //设定表名
-    public $table = 'f_admin_user';
-
-    //返回数据信息定义
-    public static $success = array('code' => '1', 'msg' => '登录成功');
-
-    public static $name_err = array('code' => '0', 'msg' => '用户名不存在');
-
-    public static $pass_err = array('code' => '0', 'msg' => '密码错误');
-
-    public static $status_err = array('code' => '0', 'msg' => '账号已冻结');
-
-    public static $empty_data = array('code' => '0', 'msg' => '请填写完整数据');
-
-
-    //新增用户验证信息以及报错信息
-    public static $addRules = [
-        'username' => 'required|max:20|unique:f_admin_user,username',
-        'password' => 'required|confirmed',
-        'password_confirmation' => 'required',
-        'email' => 'required|email|unique:f_admin_user,email',
-    ];
-
-    public static $addMessages = [
-        'username.required' => '必须填写用户名',
-        'username.max' => '用户名不能超过20个字符',
-        'username.unique' => '用户名已存在',
-        'password.required' => '必须填写密码',
-        'password.confirmed' => '两次密码不一致',
-        'password_confirmed.required' => '必须填写确认密码',
-        'email.required' => '必须填写邮箱',
-        'email.sometimes' => '邮箱以存在',
-        'email.email' => '邮箱格式错误',
-        'email.unique' => '邮箱已存在',
-    ];
-
-
-    public function add($data)
+    /**
+     * 新增方法 所有数据库写入操作走一个方法 ，如果有特殊情况，在子类对当前方法进行重写
+     * @param $data 写入的数据
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public static function add($data)
     {
         //入库
         $result = self::create($data);
 
         return add_result($result);
     }
+
+
+    /**
+     * 更改状态 但是只适用于 0 || 1
+     * @param $id 数据表主键
+     * @param $status 当前状态
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public static function status($id, $status)
+    {
+        $result = self::where('id', $id)->update(array('status' => !$status));
+
+        return status_result($result, $status);
+    }
+
+
+    /**
+     * 软删除 公共删除方法
+     * @param $id 数据表主键
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public static function delData($id)
+    {
+
+        $result = self::where('id', $id)->delete();
+
+        return delete_result($result);
+    }
+
+    /**
+     * 更新数据
+     * @param $id 数据表主键
+     * @param $data 更新的数据
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public static function updateData($id, $data)
+    {
+
+        $result = self::where('id', $id)->update($data);
+
+        return update_result($result);
+    }
+
 
 }

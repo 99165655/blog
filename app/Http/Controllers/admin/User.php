@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\admin;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\model\admin\AdminUser;
+use App\model\admin\User AS UserModel;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class User extends Base
@@ -19,52 +19,27 @@ class User extends Base
 
         $username = trim($request->input('username', ''));
 
-        return AdminUser::userData($page, $username);
+        return UserModel::userData($page, $username);
     }
 
-    /**
-     * 新增后台用户
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function addUser(Request $request)
-    {
-        //接受数据
-        $data = $request->input();
-
-        //验证 规则 如果存在问题则抛出错误
-        $validator = Validator::make($data, AdminUser::$addRules, AdminUser::$addMessages);
-        $error = $validator->errors()->first();
-        if ($error) {
-            return response()->json(array('code' => '0', 'msg' => $error));
-        }
-
-        //执行写入方法 并返回结果
-        return AdminUser::addUser($data);
-    }
 
     /**
-     * 软删除
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * 因为 新增用户需要对密码进行加密处理 所以这里 进行重写
      */
-    public function deleteUser(Request $request)
+
+    public function add(Request $request)
     {
-        $id = $request->input('id', 0);
-        return AdminUser::deleteUser($id);
-    }
 
-    /**
-     * 修改状态
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function userStatus(Request $request)
-    {
-        $id = $request->input('id', 0);
+        //获取数据
+        $data = $request->post();
 
-        $status = $request->input('status', 0);
+        //验证 通过返回模型不通过抛出错误
+        $model = self::commonValidator($request,$data,'add');
 
-        return AdminUser::userStatus($id, $status);
+        //处理密码
+        $data['password'] = Hash::make($data['password']);
+
+        return  $model::add($data);
     }
 }
+

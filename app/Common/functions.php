@@ -40,10 +40,15 @@ function add_result($res)
 function update_result($res)
 {
     if ($res) {
+
         return response()->json(array('code' => '1', 'msg' => '编辑成功'));
+
     } else {
+
         return response()->json(array('code' => '0', 'msg' => '编辑失败'));
+
     }
+
 }
 
 /**
@@ -56,10 +61,15 @@ function update_result($res)
 function delete_result($res)
 {
     if ($res) {
+
         return response()->json(array('code' => '1', 'msg' => '删除成功'));
+
     } else {
+
         return response()->json(array('code' => '0', 'msg' => '删除失败'));
+
     }
+
 }
 
 /**
@@ -71,11 +81,17 @@ function delete_result($res)
  */
 function status_result($res, $status)
 {
+
     if ($res && $status == 0) {
+
         return response()->json(array('code' => '1', 'msg' => '以启用'));
+
     } else {
+
         return response()->json(array('code' => '0', 'msg' => '以停用'));
+
     }
+
 }
 
 function getModel($request)
@@ -90,10 +106,113 @@ function getModel($request)
     $start = strrpos($route, '/') + 1;
 
     //截取字符串返回 控制器名称 并返回
-    $class =  substr($route, $start, $end);
+    $class = substr($route, $start, $end);
 
-    $model = new \ReflectionClass('App\model\admin\\'.$class);
+    //实例化映射类
+    $model = new \ReflectionClass('App\model\admin\\' . $class);
 
+    //返回路境内的模型
     return $model->newInstance();
 
 }
+
+
+/**
+ * 抛出错误方法
+ * @param $error 错误信息
+ * @return \Illuminate\Http\JsonResponse
+ */
+function throwError($error)
+{
+
+    return response()->json(array('code' => '0', 'msg' => $error));
+
+}
+
+
+/**
+ * 获取验证规则
+ * @param $model 模型
+ * @param $type add 新增 、 del 删除 、 status 更新状态 、 edit 编辑
+ * @return bool
+ */
+function getRules($model, $type)
+{
+    //如果不是对象直接返回
+    if (is_object($model) == false) {
+
+        return false;
+
+    }
+
+    //根据类型 自动返回不同的规则
+    switch ($type) {
+
+        case'add':
+
+            $result['rules'] = $model::$addRules;
+            $result['message'] = $model::$addMessage;
+            break;
+        case'del':
+
+            $result['rules'] = $model::$delRules;
+            $result['message'] = $model::$delMessage;
+            break;
+        case'status':
+
+            $result['rules'] = $model::$statusRules;
+            $result['message'] = $model::$statusMessage;
+            break;
+        case'edit':
+
+            $result['rules'] = $model::$editRules;
+            $result['message'] = $model::$editMessage;
+            break;
+
+    }
+
+    return $result;
+
+}
+
+/**
+ * 获取错误信息
+ * @param $model 模型
+ * @param $type add 新增 、 del 删除 、 status 更新状态 、 edit 编辑
+ * @return bool
+ */
+function getMessage($model, $type)
+{
+    //如果不是对象直接返回
+    if (is_object($model) == false) {
+
+        return false;
+
+    }
+
+    //根据类型 自动返回不同的规则
+    switch ($type) {
+
+        case'add':
+
+            return $model::$addMessage;
+
+        case'del':
+
+            return $model::$delMessage;
+
+        case'status':
+
+            return $model::$statusMessage;
+
+        case'edit':
+
+            return $model::$editMessage;
+
+    }
+
+}
+
+
+
+

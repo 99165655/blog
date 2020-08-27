@@ -7,8 +7,6 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use App\model\admin\User;
-use App\model\admin\Base as BaseModel;
 
 /**
  * Class Base
@@ -25,24 +23,13 @@ class Base extends Controller
      */
     public function add(Request $request)
     {
-
         //获取数据
         $data = $request->post();
 
-        $model = getModel($request);
+        //验证 通过返回模型不通过抛出错误
+        $model = self::commonValidator($request,$data,'add');
 
-        //验证 规则 如果存在问题则抛出错误
-        $validator = Validator::make($data, $model::$addRules, $model::$addMessages);
-
-        $error = $validator->errors()->first();
-
-        if ($error) {
-
-            return response()->json(array('code' => '0', 'msg' => $error));
-
-        }
-
-
+        return $model::add($data);
     }
 
     /**
@@ -63,11 +50,41 @@ class Base extends Controller
     }
 
     /**
-     * 删除
+     * 删除（软删）
      */
-    public function delete()
+    public function delData(Request $request)
+    {
+        //获取数据
+//        $id = $request->post('id');
+//
+//        //验证 通过返回模型不通过抛出错误
+//        $model = self::commonValidator($request,$data,'add');
+
+    }
+
+    /**
+     * 封装验证部分代码
+     * 因为 不管增删改 都需要验证 使用laravel 的验证数据
+     * 所以把这一部分封装
+     */
+    public static function commonValidator($request,$data,$type)
     {
 
+        //获取模型
+        $model = getModel($request);
+
+        //验证 规则 如果存在问题则抛出错误
+        $validator = Validator::make($data, $model::$type, $model::$addMessages);
+
+        $error = $validator->errors()->first();
+
+        if ($error) {
+
+             throw new \Exception($error);
+
+        }
+
+        return $model;
     }
 
 }

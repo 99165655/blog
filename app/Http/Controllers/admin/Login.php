@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\model\admin\AdminUser as User;
+use App\model\admin\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redis;
 
