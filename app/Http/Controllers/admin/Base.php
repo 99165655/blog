@@ -27,7 +27,7 @@ class Base extends Controller
         $data = $request->post();
 
         //验证 通过返回模型不通过抛出错误
-        $model = self::commonValidator($request,$data,'add');
+        $model = self::commonValidator($request, $data, 'add');
 
         return $model::add($data);
     }
@@ -54,12 +54,13 @@ class Base extends Controller
      */
     public function delData(Request $request)
     {
-        //获取数据
-//        $id = $request->post('id');
-//
-//        //验证 通过返回模型不通过抛出错误
-//        $model = self::commonValidator($request,$data,'add');
 
+        $data = $request->post();
+
+        //验证 通过返回模型不通过抛出错误
+        $model = self::commonValidator($request, $data, 'del');
+
+        return $model::delData($data['id']);
     }
 
     /**
@@ -67,20 +68,24 @@ class Base extends Controller
      * 因为 不管增删改 都需要验证 使用laravel 的验证数据
      * 所以把这一部分封装
      */
-    public static function commonValidator($request,$data,$type)
+    public static function commonValidator($request, $data, $type)
     {
 
         //获取模型
         $model = getModel($request);
 
+        //获取验证字段
+        $rules = getRules($model, $type);
+
         //验证 规则 如果存在问题则抛出错误
-        $validator = Validator::make($data, $model::$type, $model::$addMessages);
+        $validator = Validator::make($data, $rules['rules'], $rules['message']);
 
         $error = $validator->errors()->first();
 
+
         if ($error) {
 
-             throw new \Exception($error);
+            return throwError($error);
 
         }
 

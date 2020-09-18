@@ -39,6 +39,7 @@ class User extends Base
         //处理密码
         $data['password'] = Hash::make($data['password']);
 
+
         return  $model::add($data);
     }
 }

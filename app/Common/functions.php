@@ -106,7 +106,7 @@ function getModel($request)
     $start = strrpos($route, '/') + 1;
 
     //截取字符串返回 控制器名称 并返回
-    $class = substr($route, $start, $end);
+    $class = substr($route, $start, ($end / -1));
 
     //实例化映射类
     $model = new \ReflectionClass('App\model\admin\\' . $class);
@@ -145,28 +145,30 @@ function getRules($model, $type)
 
     }
 
+    $result = array();
+
     //根据类型 自动返回不同的规则
     switch ($type) {
 
         case'add':
 
-            $result['rules'] = $model::$addRules;
-            $result['message'] = $model::$addMessage;
+            $result['rules'] = $model->addRules;
+            $result['message'] = $model->addMessage;
             break;
         case'del':
 
-            $result['rules'] = $model::$delRules;
-            $result['message'] = $model::$delMessage;
+            $result['rules'] = $model->delRules;
+            $result['message'] = $model->delMessage;
             break;
         case'status':
 
-            $result['rules'] = $model::$statusRules;
-            $result['message'] = $model::$statusMessage;
+            $result['rules'] = $model->statusRules;
+            $result['message'] = $model->statusMessage;
             break;
         case'edit':
 
-            $result['rules'] = $model::$editRules;
-            $result['message'] = $model::$editMessage;
+            $result['rules'] = $model::editRules;
+            $result['message'] = $model::editMessage;
             break;
 
     }

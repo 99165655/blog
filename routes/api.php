@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,7 +23,7 @@ Route::group(['middleware'=>['api'],'prefix'=>'admin'],function(){
     Route::post('user/add','admin\User@add');
 
     //删除管理员
-    Route::post('deluser','admin\User@delData');
+    Route::post('user/del','admin\User@delData');
 
     //修改用户状态
     Route::post('frozenuser','admin\User@userStatus');

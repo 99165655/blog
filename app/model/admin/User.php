@@ -10,8 +10,7 @@ class User extends Base
     use SoftDeletes;
 
     //设置可写入字段
-    protected $fillable = array('username', 'password', 'email', 'token');
-
+    protected $fillable = array('username', 'password', 'email');
 
     //设定表名
     public $table = 'f_admin_user';
@@ -28,14 +27,14 @@ class User extends Base
     public static $empty_data = array('code' => '0', 'msg' => '请填写完整数据');
 
     //新增用户验证信息以及报错信息
-    public static $addRules = [
+    public  $addRules = [
         'username' => 'required|max:20|unique:f_admin_user,username',
         'password' => 'required|confirmed',
         'password_confirmation' => 'required',
         'email' => 'required|email|unique:f_admin_user,email',
     ];
 
-    public static $addMessages = [
+    public  $addMessage = [
         'username.required' => '必须填写用户名',
         'username.max' => '用户名不能超过20个字符',
         'username.unique' => '用户名已存在',
@@ -48,19 +47,24 @@ class User extends Base
         'email.unique' => '邮箱已存在',
     ];
 
+    //软删除验证
+    public  $delRules = [
+        'id' => 'required',
+    ];
 
+    public  $delMessage = [
+        'id.required' => 'ID不能为空',
+    ];
 
     public static function adminLogin($data)
     {
 
         $false = false;
 
-
-        $field = array('id',  'username', 'password', 'status');
+        $field = array('id', 'username', 'password', 'status');
 
         //以账号查询数据库
         $user = self::where('username', $data['username'])->select($field)->first();
-
         //用户不存在则抛出错误
         if (empty($user)) return ret_result($false, self::$name_err);
 

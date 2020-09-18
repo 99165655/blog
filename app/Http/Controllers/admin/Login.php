@@ -18,7 +18,6 @@ class Login extends Controller
         $data['username'] = $request->post('username', '');
 
         $data['password'] = $request->post('password', '');
-
         //如果数据为空 抛出错误
         if (in_array('', $data)) return response()->json(User::$empty_data);
 
