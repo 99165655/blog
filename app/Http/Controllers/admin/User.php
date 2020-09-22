@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\admin;
 
 use Illuminate\Http\Request;
-use App\model\admin\User AS UserModel;
+use App\model\admin\User as UserModel;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 
 class User extends Base
 {
@@ -16,6 +15,7 @@ class User extends Base
     public function userList(Request $request)
     {
         $page = $request->input('currentPage', 1);
+
 
         $username = trim($request->input('username', ''));
 
@@ -34,13 +34,12 @@ class User extends Base
         $data = $request->post();
 
         //验证 通过返回模型不通过抛出错误
-        $model = self::commonValidator($request,$data,'add');
+        $model = self::commonValidator($request, $data, 'add');
 
         //处理密码
         $data['password'] = Hash::make($data['password']);
 
-
-        return  $model::add($data);
+        return $model->add($data);
     }
 }
 

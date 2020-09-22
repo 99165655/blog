@@ -37,7 +37,7 @@ class User extends Base
     public  $addMessage = [
         'username.required' => '必须填写用户名',
         'username.max' => '用户名不能超过20个字符',
-        'username.unique' => '用户名已存在',
+        'username.unique' => '该用户名已经有人使用过',
         'password.required' => '必须填写密码',
         'password.confirmed' => '两次密码不一致',
         'password_confirmed.required' => '必须填写确认密码',

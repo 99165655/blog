@@ -94,7 +94,7 @@ function status_result($res, $status)
 
 }
 
-function getModel($request)
+function getPath($request)
 {
     //获取路由 并将反斜线 全部转为正斜线
     $route = str_replace('\\', '/', $request->route()->getAction()['controller']);
@@ -108,11 +108,7 @@ function getModel($request)
     //截取字符串返回 控制器名称 并返回
     $class = substr($route, $start, ($end / -1));
 
-    //实例化映射类
-    $model = new \ReflectionClass('App\model\admin\\' . $class);
-
-    //返回路境内的模型
-    return $model->newInstance();
+    return 'App\model\admin\\' . $class;
 
 }
 
@@ -177,43 +173,7 @@ function getRules($model, $type)
 
 }
 
-/**
- * 获取错误信息
- * @param $model 模型
- * @param $type add 新增 、 del 删除 、 status 更新状态 、 edit 编辑
- * @return bool
- */
-function getMessage($model, $type)
-{
-    //如果不是对象直接返回
-    if (is_object($model) == false) {
 
-        return false;
-
-    }
-
-    //根据类型 自动返回不同的规则
-    switch ($type) {
-
-        case'add':
-
-            return $model::$addMessage;
-
-        case'del':
-
-            return $model::$delMessage;
-
-        case'status':
-
-            return $model::$statusMessage;
-
-        case'edit':
-
-            return $model::$editMessage;
-
-    }
-
-}
 
 
 

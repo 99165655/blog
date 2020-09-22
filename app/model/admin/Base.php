@@ -21,7 +21,7 @@ class Base extends Model
      * @param $data 写入的数据
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function add($data)
+    public  function add($data)
     {
         //入库
         $result = self::create($data);

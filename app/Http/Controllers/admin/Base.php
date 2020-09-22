@@ -29,7 +29,7 @@ class Base extends Controller
         //验证 通过返回模型不通过抛出错误
         $model = self::commonValidator($request, $data, 'add');
 
-        return $model::add($data);
+        return $model->add($data);
     }
 
     /**
@@ -72,7 +72,9 @@ class Base extends Controller
     {
 
         //获取模型
-        $model = getModel($request);
+        $path = getPath($request);
+
+        $model = app($path);
 
         //获取验证字段
         $rules = getRules($model, $type);
@@ -85,7 +87,7 @@ class Base extends Controller
 
         if ($error) {
 
-            return throwError($error);
+            throw new \Exception($error,99999);
 
         }
 
