@@ -82,15 +82,9 @@ function delete_result($res)
 function status_result($res, $status)
 {
 
-    if ($res && $status == 0) {
+    $message = $status == '0' ? '以启用' : '已冻结';
 
-        return response()->json(array('code' => '1', 'msg' => '以启用'));
-
-    } else {
-
-        return response()->json(array('code' => '0', 'msg' => '以停用'));
-
-    }
+    return response()->json(array('code' => '1', 'msg' => $message, 'status' => $status));
 
 }
 

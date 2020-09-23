@@ -26,5 +26,5 @@ Route::group(['middleware'=>['api'],'prefix'=>'admin'],function(){
     Route::post('user/del','admin\User@delData');
 
     //修改用户状态
-    Route::post('frozenuser','admin\User@userStatus');
+    Route::post('user/status','admin\User@status');
 });

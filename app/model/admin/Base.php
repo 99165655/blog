@@ -16,6 +16,26 @@ use Illuminate\Database\Eloquent\Model;
 class Base extends Model
 {
 
+    //软删除验证
+    public $delRules = [
+        'id' => 'required',
+    ];
+
+    public $delMessage = [
+        'id.required' => 'ID不能为空',
+    ];
+
+    //更新状态验证
+    public $statusRules = [
+        'id' => 'required',
+        'status' => 'required',
+    ];
+
+    public $statusMessage = [
+        'id.required' => 'ID不能为空',
+        'status.required' => '状态字段不能为空',
+    ];
+
     /**
      * 新增方法 所有数据库写入操作走一个方法 ，如果有特殊情况，在子类对当前方法进行重写
      * @param $data 写入的数据

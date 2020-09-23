@@ -27,15 +27,16 @@ class User extends Base
     public static $empty_data = array('code' => '0', 'msg' => '请填写完整数据');
 
     //新增用户验证信息以及报错信息
-    public  $addRules = [
-        'username' => 'required|max:20|unique:f_admin_user,username',
+    public $addRules = [
+        'username' => 'required|regex:/^[a-zA-Z0-9]+$/u|max:20|unique:f_admin_user,username',
         'password' => 'required|confirmed',
         'password_confirmation' => 'required',
         'email' => 'required|email|unique:f_admin_user,email',
     ];
 
-    public  $addMessage = [
+    public $addMessage = [
         'username.required' => '必须填写用户名',
+        'username.regex' => '用户名只能输入字母或数字',
         'username.max' => '用户名不能超过20个字符',
         'username.unique' => '该用户名已经有人使用过',
         'password.required' => '必须填写密码',
@@ -47,14 +48,7 @@ class User extends Base
         'email.unique' => '邮箱已存在',
     ];
 
-    //软删除验证
-    public  $delRules = [
-        'id' => 'required',
-    ];
 
-    public  $delMessage = [
-        'id.required' => 'ID不能为空',
-    ];
 
     public static function adminLogin($data)
     {

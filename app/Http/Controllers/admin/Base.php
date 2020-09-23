@@ -44,9 +44,19 @@ class Base extends Controller
     /**
      * 修改状态
      */
-    public function status()
+    public function status(Request $request)
     {
+        //获取数据
+        $data = $request->post();
 
+        $id = $request->post('id');
+
+        $status = $request->post('status');
+
+        //验证 通过返回模型不通过抛出错误
+        $model = self::commonValidator($request, $data, 'status');
+
+        return $model->status($id, $status);
     }
 
     /**
@@ -87,7 +97,7 @@ class Base extends Controller
 
         if ($error) {
 
-            throw new \Exception($error,99999);
+            throw new \Exception($error, 99999);
 
         }
 
